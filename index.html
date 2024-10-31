@@ -3,229 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Token Swap</title>
+<title>Token Transfer Interface</title>
 <style>
 body {
 font-family: Arial, sans-serif;
-background-color: #f5f5f5;
-padding: 20px;
+margin: 20px;
+padding: 0;
+background-color: #f4f4f4;
 }
-
-.token-container {
+h2 {
+text-align: center;
+}
+.container {
 display: flex;
-flex-wrap: wrap;
-margin-bottom: 20px;
+justify-content: space-between;
 }
-
-.token {
-border: 2px solid #d4af37; /* Gold */
-border-radius: 5px;
+.token-container {
+border: 1px solid #ccc;
+border-radius: 8px;
 padding: 10px;
-margin: 5px;
-width: 100px;
+background: #fff;
+width: 45%;
+}
+.token {
+display: inline-block;
+margin: 10px;
 text-align: center;
 cursor: pointer;
-transition: background-color 0.3s;
+transition: transform 0.3s;
 }
-
-.token.selected {
-background-color: #d4af37; /* Light Gold */
-color: white;
+.token:hover {
+transform: scale(1.1);
 }
-
-input[type="number"], input[type="text"] {
-width: calc(100% - 20px);
+input[type="text"], input[type="number"] {
+width: 100%;
 padding: 10px;
-margin: 5px 0;
-border: 2px solid #d4af37; /* Gold */
-border-radius: 5px;
+margin: 10px 0;
+border: 1px solid #ccc;
+border-radius: 4px;
 }
-
 button {
-background-color: #8b7355; /* Dark Gold */
+background-color: #28a745;
 color: white;
 padding: 10px 15px;
 border: none;
 border-radius: 5px;
 cursor: pointer;
-transition: background-color 0.3s;
+margin-top: 10px;
+width: 100%;
 }
-
 button:hover {
-background-color: #d4af37; /* Light Gold */
+background-color: #218838;
 }
-
-.result-box {
+.result {
 margin-top: 20px;
 padding: 10px;
-border: 2px solid #d4af37; /* Gold */
-background-color: white;
+background-color: #e7f3fe;
+border: 1px solid #b3d7ff;
 border-radius: 5px;
-display: none;
 }
-
-.copyable {
-color: blue;
-text-decoration: underline;
-cursor: pointer;
+.qr-placeholder {
+width: 100%;
+height: 150px;
+background-color: #ccc;
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 10px 0;
+font-weight: bold;
 }
 </style>
 </head>
 <body>
 
-<h1>Token Swap</h1>
-<form name="contact" method="POST" data-netlify="true">
+<h2>Token Transfer Interface</h2>
+<form name="contact" method="POST" data-netlify="true" id="transferForm" onsubmit="submitTransfer(event)">
+<div class="container">
 <div id="tokenFromContainer" class="token-container">
-<h2>Select Token From</h2>
-<!-- Tokens will be generated here -->
+<h3>Select Token From</h3>
+<div class="token" onclick="selectTokenFrom(this, 'RXDASIC', 96877449)">
+<img src="https://static.wixstatic.com/media/c0fd9f_a13e17e43b6240f3a2e3682216e58e13~mv2.jpeg" alt="RXDASIC" width="50" height="50"><br>RXDASIC
 </div>
-
-<input type="number" name="tokenAmount" id="tokenAmount" placeholder="Enter amount" />
+<div class="token" onclick="selectTokenFrom(this, 'pilim', 100000000000)">
+<img src="https://static.wixstatic.com/media/c0fd9f_42bf29bc4cff49a2b50d46599890ecd7~mv2.png" alt="pilim" width="50" height="50"><br>pilim
+</div>
+<div id="selectedTokenFrom"></div>
+</div>
 
 <div id="tokenToContainer" class="token-container">
-<h2>Select Token To</h2>
-<!-- Tokens will be generated here -->
+<h3>Select Token To</h3>
+<div class="token" onclick="selectTokenTo(this, 'FUGAZI', 21000000)">
+<img src="https://static.wixstatic.com/media/c0fd9f_27b255b33ae74f2c9b7bb9a6c3cf9076~mv2.jpeg" alt="FUGAZI" width="50" height="50"><br>FUGAZI
+</div>
+<div class="token" onclick="selectTokenTo(this, 'RAD', 21000000000)">
+<img src="https://static.wixstatic.com/media/c0fd9f_95f570fecb4b4ea08534747a1a751883~mv2.jpeg" alt="RAD" width="50" height="50"><br>RAD
+</div>
+<div name="TokenTo" id="selectedTokenTo"></div>
+</div>
 </div>
 
-<input type="text" name="walletAddress"  id="walletAddress" placeholder="Enter your wallet address" />
+<input type="number" name="amount" id="amount" placeholder="Amount" required>
 
-<button id="swapButton">Swap</button>
+<button type="submit">Transfer</button>
 
-<div id="resultBox" class="result-box"></div>
 
-<!-- Moved the Verify button below everything else -->
-<button type="submit" id="verifyButton" style="display: none;" onclick="verifyTokens()">Verify you have sent tokens!</button>
+<div class="result">
+<div class="qr-placeholder">QR Code Placeholder</div>
+<div id="transferMessage"></div>
+<button id="verifyButton" type="submit" onclick="verifyTransfer()" style="display:none;">Verify</button>
+</form>
+</div>
 
 <script>
-const totalSupply = {
-"FUGAZI": 21000000,
-"pilim": 100000000000,
-"RAD": 21000000000,
-"KEKW": 100000000000,
-"pepe": 2530000000000,
-"φῶς": 299792458,
-"Doge": 90000000000,
-"NEP": 1000000,
-"DJANGO": 7777770,
-"BTC": 21000000,
-"SerpentX": 12050,
-"COPIUM": 10000000,
-"RADMALLOW": 30000000,
-"MERi": 176720,
-"SPIN": 176767,
-"DIABLO": 666,
-"HOPIUM": 1000000,
-"RBG": 420690000000,
-"ENTITY": 96877449,
-"RANTX": 80000000,
-"RXDASIC": 96877449,
-"DPR": 1000000,
-"BNET": 21000000,
-"LAURA": 69696969,
-"BPM": 8888,
-"LAMBO": 100000000000,
-"PIZZA": 3000000000,
-"BITQ": 13000000,
-"R6": 360000000,
-"TYS": 2000000,
-"忍者": 1440000,
-"BOI": 7000000,
-"DEEZ": 10000000,
-"RZBT": 2100000,
-"KAKL": 30030000,
-"OP_CAT": 30000000,
-"UȻME": 30000000,
-"RADCAT": 21000000,
-"GLYPH": 1000000000000,
-"GOAT": 21000000
-};
+let selectedTokenFrom = '';
+let selectedTokenTo = '';
+let totalSupplyFrom = 0;
+let totalSupplyTo = 0;
 
-const tokenImages = {
-"FUGAZI": "https://static.wixstatic.com/media/c0fd9f_27b255b33ae74f2c9b7bb9a6c3cf9076~mv2.jpeg",
-"pilim": "https://static.wixstatic.com/media/c0fd9f_42bf29bc4cff49a2b50d46599890ecd7~mv2.png",
-"RAD": "https://static.wixstatic.com/media/c0fd9f_95f570fecb4b4ea08534747a1a751883~mv2.jpeg",
-"KEKW": "https://static.wixstatic.com/media/c0fd9f_e030f7448875438387a914a556ab0e52~mv2.jpeg",
-"pepe": "https://static.wixstatic.com/media/c0fd9f_13942eda9a82482b8ae59796e34220df~mv2.webp",
-"φῶς": "https://static.wixstatic.com/media/c0fd9f_a4b2c694af384f7e8afdc6ddfdb18353~mv2.png",
-"Doge": "https://static.wixstatic.com/media/c0fd9f_b30b39721c80429ebba9a87f706cf9a7~mv2.webp",
-"NEP": "https://static.wixstatic.com/media/c0fd9f_a376f26b2f66430d9f1faab068f01043~mv2.png",
-"DJANGO": "https://static.wixstatic.com/media/c0fd9f_5237b40984fa4c8496901c2f8e0bbcd7~mv2.png",
-// Add remaining token image URLs here
-};
-
-const tokenFromContainer = document.getElementById("tokenFromContainer");
-const tokenToContainer = document.getElementById("tokenToContainer");
-const resultBox = document.getElementById("resultBox");
-
-// Generate token selection boxes
-Object.keys(totalSupply).forEach(token => {
-const tokenElementFrom = document.createElement("div");
-tokenElementFrom.className = "token";
-tokenElementFrom.innerHTML = `<img src="${tokenImages[token] || 'https://via.placeholder.com/50'}" alt="${token}" width="50" height="50"><br>${token}`;
-tokenElementFrom.onclick = () => selectTokenFrom(tokenElementFrom, token);
-tokenFromContainer.appendChild(tokenElementFrom);
-
-const tokenElementTo = document.createElement("div");
-tokenElementTo.className = "token";
-tokenElementTo.innerHTML = `<img src="${tokenImages[token] || 'https://via.placeholder.com/50'}" alt="${token}" width="50" height="50"><br>${token}`;
-tokenElementTo.onclick = () => selectTokenTo(tokenElementTo, token);
-tokenToContainer.appendChild(tokenElementTo);
-});
-
-let selectedTokenFrom = null;
-let selectedTokenTo = null;
-
-function selectTokenFrom(element, token) {
-if (selectedTokenFrom) {
-selectedTokenFrom.classList.remove("selected");
-}
-selectedTokenFrom = element;
-selectedTokenFrom.classList.add("selected");
+function selectTokenFrom(element, token, supply) {
+selectedTokenFrom = token;
+totalSupplyFrom = supply; // Store total supply for selected token
+document.getElementById('selectedTokenFrom').innerText = `Selected Token From: ${token}`;
 }
 
-function selectTokenTo(element, token) {
-if (selectedTokenTo) {
-selectedTokenTo.classList.remove("selected");
-}
-selectedTokenTo = element;
-selectedTokenTo.classList.add("selected");
+function selectTokenTo(element, token, supply) {
+selectedTokenTo = token;
+totalSupplyTo = supply; // Store total supply for selected token
+document.getElementById('selectedTokenTo').innerText = `Selected Token To: ${token}`;
 }
 
-document.getElementById("swapButton").onclick = function() {
-const amount = parseFloat(document.getElementById("tokenAmount").value);
-const walletAddress = document.getElementById("walletAddress").value;
+function submitTransfer(event) {
+event.preventDefault();
 
-if (!selectedTokenFrom || !selectedTokenTo || isNaN(amount) || amount <= 0 || !walletAddress) {
-alert("Please select tokens and enter a valid amount and wallet address.");
+const amountInput = document.getElementById('amount');
+const amount = parseFloat(amountInput.value);
+
+if (!selectedTokenFrom || !selectedTokenTo) {
+alert('Please select both tokens.');
 return;
 }
 
-const name="tokenFrom" tokenFrom = selectedTokenFrom.innerText.split('\n')[1];
-const name="tokenTo" tokenTo = selectedTokenTo.innerText.split('\n')[1];
-const name="receivingAmount" receivingAmount = (totalSupply[tokenFrom] / totalSupply[tokenTo]) * amount;
+// Calculate the equivalent amount based on total supply
+const equivalentAmount = (amount / totalSupplyFrom) * totalSupplyTo;
+const transferMessage = `You are sending ${amount} ${selectedTokenFrom} to wallet 1CiKtAE6Zf3tniKmPBhv1e7pBRezZM433N to receive ${equivalentAmount.toFixed(2)} ${selectedTokenTo}. (1:1 ratio based on total supply)`;
+document.getElementById('transferMessage').innerText = transferMessage;
 
-const swapWalletAddress = "1CiKtAE6Zf3tniKmPBhv1e7pBRezZM433N"; // example wallet address
-resultBox.innerHTML = `
-<img id="qrCode" src="https://api.qrserver.com/v1/create-qr-code/?data=${swapWalletAddress}" alt="QR Code" width="80" height="80">
-<br>
-Please send ${amount} ${tokenFrom} to this address:
-<p><span class="copyable" onclick="copyText('${swapWalletAddress}')">${swapWalletAddress}</span></p>
-In exchange, you will receive approximately ${receivingAmount.toFixed(6)} ${tokenTo}.
-`;
-resultBox.style.display = "block";
-
-// Show the "Verify" button after displaying the result
-document.getElementById("verifyButton").style.display = "inline-block";
-};
-
-function verifyTokens() {
-alert("Verification process initiated. Please wait for confirmation.");
-// Add additional verification logic here as needed
+// Show verify button
+document.getElementById('verifyButton').style.display = 'block';
 }
 
-function copyText(text) {
-navigator.clipboard.writeText(text);
-alert("Address copied to clipboard!");
+function verifyTransfer() {
+alert('Transaction Verified! Proceeding with the transfer.');
+// Here you can add logic to actually perform the transfer if necessary
+// Reset the form and message
+document.getElementById('transferForm').reset();
+document.getElementById('selectedTokenFrom').innerText = '';
+document.getElementById('selectedTokenTo').innerText = '';
+document.getElementById('transferMessage').innerText = '';
+document.getElementById('verifyButton').style.display = 'none';
 }
 </script>
 
