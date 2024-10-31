@@ -74,25 +74,28 @@ cursor: pointer;
 <body>
 
 <h1>Token Swap</h1>
-
+<form name="contact" method="POST" data-netlify="true">
 <div id="tokenFromContainer" class="token-container">
 <h2>Select Token From</h2>
 <!-- Tokens will be generated here -->
 </div>
 
-<input type="number" id="tokenAmount" placeholder="Enter amount" />
+<input type="number" name="tokenAmount" id="tokenAmount" placeholder="Enter amount" />
 
 <div id="tokenToContainer" class="token-container">
 <h2>Select Token To</h2>
 <!-- Tokens will be generated here -->
 </div>
 
-<input type="text" id="walletAddress" placeholder="Enter your wallet address" />
+<input type="text" name="walletAddress" id="walletAddress" placeholder="Enter your wallet address" />
 
 <button id="swapButton">Swap</button>
 
 <div id="resultBox" class="result-box"></div>
 
+<!-- Moved the Verify button below everything else -->
+<button id="verifyButton" style="display: none;" onclick="verifyTokens()">Verify you have sent tokens!</button>
+</form>
 <script>
 const totalSupply = {
 "FUGAZI": 21000000,
@@ -210,7 +213,15 @@ Please send ${amount} ${tokenFrom} to this address:
 In exchange, you will receive approximately ${receivingAmount.toFixed(6)} ${tokenTo}.
 `;
 resultBox.style.display = "block";
+
+// Show the "Verify" button after displaying the result
+document.getElementById("verifyButton").style.display = "inline-block";
 };
+
+function verifyTokens() {
+alert("Verification process initiated. Please wait for confirmation.");
+// Add additional verification logic here as needed
+}
 
 function copyText(text) {
 navigator.clipboard.writeText(text);
