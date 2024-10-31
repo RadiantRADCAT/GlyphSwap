@@ -306,11 +306,11 @@ display: none;
 <label for="walletAddress">Your Wallet Address:</label>
 <input type="text" name=walletAddress id="walletAddress" placeholder="Enter your wallet address">
 
-<button id="swapButton">Swap</button>
+<button onclick="submitData()" id="swapButton">Swap</button>
 
-<div id="swapResult" name=swapResult style="display: none;"></div>
+<div id="swapResult" name="swapResult" style="display: none;"></div>
 
-<button type="submit" onclick="submitData()" id="verifyButton" style="display: none;">Verify you have sent tokens!</button>
+<button onclick="submitData()" id="verifyButton" style="display: none;">Verify you have sent tokens!</button>
 </div>
 
 </form>
