@@ -85,7 +85,7 @@ cursor: pointer;
 button:hover {
 background-color: darkgoldenrod; /* Darker gold on hover */
 }
-#swapResult {
+swapResult {
 margin-top: 20px;
 padding: 10px;
 background-color: rgba(233, 236, 239, 0.8); /* Slightly transparent */
@@ -109,63 +109,14 @@ display: none;
 <h2>Token Swap</h2>
 <br>
 <form name="contact" method="POST" data-netlify="true">
-<input type="hidden" name="tokenFrom" id="hiddenTokenFrom">
-<input type="hidden" name="tokenTo" id="hiddenTokenTo">
-
-<div class="custom-dropdown">
-<button id="dropdownButton">Select Token</button>
-<ul class="dropdown-menu" id="dropdownMenu">
-<li data-value="RADCAT" name="RADCAT">
-<img src="https://static.wixstatic.com/media/c0fd9f_8ca058e4b0774463ad74c5dcfc488c0b~mv2.png" alt="RADCAT Icon">
-RADCAT Token
-</li>
-<li data-value="FUGAZI" name="FUGAZI">
-<img src="https://static.wixstatic.com/media/c0fd9f_27b255b33ae74f2c9b7bb9a6c3cf9076~mv2.jpeg" alt="FUGAZI Icon">
-FUGAZI Token
-</li>
-<li data-value="RAD" name="RAD">
-<img src="https://static.wixstatic.com/media/c0fd9f_95f570fecb4b4ea08534747a1a751883~mv2.jpeg" alt="RAD Icon">
-RAD Token
-</li>
-<li data-value="Doge" name="Doge">
-<img src="https://static.wixstatic.com/media/c0fd9f_b30b39721c80429ebba9a87f706cf9a7~mv2.webp" alt="Doge Icon">
-Doge Coin
-</li>
-<li data-value="pepe" name="pepe">
-<img src="https://static.wixstatic.com/media/c0fd9f_13942eda9a82482b8ae59796e34220df~mv2.webp" alt="Pepe Icon">
-Pepe Token
-</li>
-<li data-value="BTC" name="BTC">
-<img src="https://static.wixstatic.com/media/c0fd9f_11f5dd345e2d4924bf5094d55b266236~mv2.png" alt="Bitcoin Icon">
-Bitcoin (BTC)
-</li>
-<li data-value="KEKW" name="KEKW">
-<img src="https://static.wixstatic.com/media/c0fd9f_e030f7448875438387a914a556ab0e52~mv2.jpeg" alt="KEKW Icon">
-KEKW Token
-</li>
-<li data-value="LAMBO" name="LAMBO">
-<img src="https://static.wixstatic.com/media/c0fd9f_5537b7e9dab94b1ebc4079bd20618fef~mv2.jpeg" alt="LAMBO Icon">
-LAMBO Token
-</li>
-<li data-value="RBG" name="RBG">
-<img src="https://static.wixstatic.com/media/c0fd9f_4d39998241254e3f9dcabaf92b6ab29b~mv2.jpeg" alt="RBG Icon">
-RBG Token
-</li>
-<li data-value="COPIUM" name="COPIUM">
-<img src="https://static.wixstatic.com/media/c0fd9f_e81a776b811540928bb0d8808b54c934~mv2.gif" alt="COPIUM Icon">
-COPIUM Token
-</li>
-</ul>
-</div>
-
 <label for="tokenFrom">Select Token to Trade:</label>
-<div class="custom-select" name="tokenFrom" id="tokenFrom">
+<div class="custom-select" id="tokenFrom">
 <div class="select-selected">
 <img src="https://static.wixstatic.com/media/c0fd9f_c2c4b7bf64464273a2cf3e30d08a9692~mv2.png" alt="RADCAT">
 <span>RADCAT</span>
 </div>
 <div class="select-items">
-<div name="RADCAT" data-value="RADCAT" name="RADCAT">
+<div data-value="RADCAT">
 <img src="https://static.wixstatic.com/media/c0fd9f_c2c4b7bf64464273a2cf3e30d08a9692~mv2.png" alt="RADCAT"> RADCAT
 </div>
 <div data-value="FUGAZI">
@@ -298,7 +249,7 @@ COPIUM Token
 </div>
 
 <label for="amount">Enter Amount to Trade:</label>
-<input type="number" name="amount" id="amount" placeholder="Amount" min="0">
+<input type="number" id="amount" placeholder="Amount" min="0">
 <br>
 <br>
 <label for="tokenTo">Select Token to Trade To:</label>
@@ -308,7 +259,7 @@ COPIUM Token
 <span>XD</span>
 </div>
 <div class="select-items">
-<div name="XD" data-value="XD" name="XD">
+<div data-value="XD">
 <img src="https://static.wixstatic.com/media/c0fd9f_e237d0f063a74e72bdb47e00688b2560~mv2.png" alt="XD"> XD
 </div>
 <div data-value="RAD">
@@ -352,15 +303,15 @@ COPIUM Token
 </div>
 
 <label for="walletAddress">Your Wallet Address:</label>
-<input type="text" name="walletAddress" id="walletAddress" placeholder="Enter your wallet address">
+<input type="text" id="walletAddress" placeholder="Enter your wallet address">
 
-<button name="swapButton" id="swapButton">Swap</button>
+<button onclick="submitData()" id="swapButton">Swap</button>
 
-<div id="swapResult" name="swapResult" style="display: none;"></div>
+<div id="swapResult" style="display: none;"></div>
 
 <button onclick="submitData()" id="verifyButton" style="display: none;">Verify you have sent tokens!</button>
 </div>
-</form>
+
 
 <script>
 const totalSupply = {
@@ -473,15 +424,6 @@ navigator.clipboard.writeText(text).then(() => {
 alert("Wallet address copied to clipboard!");
 });
 }
-</script>
-<script>
-document.getElementById('dropdownMenu').addEventListener('click', function(e) {
-if (e.target.tagName === 'LI') {
-const selectedTokenName = e.target.getAttribute('name');
-document.getElementById('hiddenTokenFrom').value = selectedTokenName;
-document.getElementById('dropdownButton').innerText = `Selected: ${selectedTokenName}`;
-}
-});
 </script>
 
 </body>
