@@ -475,28 +475,12 @@ alert("Wallet address copied to clipboard!");
 }
 </script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-// Get elements
-const tokenFromDropdown = document.getElementById("tokenFrom");
-const hiddenTokenFrom = document.getElementById("hiddenTokenFrom");
-
-// Add event listeners to capture selection
-tokenFromDropdown.addEventListener("click", function(event) {
-if (event.target && event.target.closest(".select-items div")) {
-// Get the selected value
-const selectedItem = event.target.closest(".select-items div");
-const selectedValue = selectedItem.getAttribute("data-value");
-
-// Update the display in the dropdown
-const selectedText = selectedItem.querySelector("span").innerText;
-const selectedImg = selectedItem.querySelector("img").src;
-document.querySelector(".select-selected span").innerText = selectedText;
-document.querySelector(".select-selected img").src = selectedImg;
-
-// Set the hidden input's value for form submission
-hiddenTokenFrom.value = selectedValue;
+document.getElementById('dropdownMenu').addEventListener('click', function(e) {
+if (e.target.tagName === 'LI') {
+const selectedTokenName = e.target.getAttribute('name');
+document.getElementById('hiddenTokenFrom').value = selectedTokenName;
+document.getElementById('dropdownButton').innerText = `Selected: ${selectedTokenName}`;
 }
-});
 });
 </script>
 
