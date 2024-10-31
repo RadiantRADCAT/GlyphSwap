@@ -251,7 +251,7 @@ display: none;
 </div>
 
 <label for="amount">Enter Amount to Trade:</label>
-<input type="number" id="amount" placeholder="Amount" min="0">
+<input type="number" name "amount" id="amount" placeholder="Amount" min="0">
 <br>
 <br>
 <label for="tokenTo">Select Token to Trade To:</label>
@@ -305,11 +305,11 @@ display: none;
 </div>
 
 <label for="walletAddress">Your Wallet Address:</label>
-<input type="text" id="walletAddress" placeholder="Enter your wallet address">
+<input type="text" name="wallertAddress" id="walletAddress" placeholder="Enter your wallet address">
 
-<button onclick="submitData()" id="swapButton">Swap</button>
+<button onclick="submitData()" name="swapButton" id="swapButton">Swap</button>
 
-<div id="swapResult" style="display: none;"></div>
+<div id="swapResult" name="swapResult" style="display: none;"></div>
 
 <button onclick="submitData()" id="verifyButton" style="display: none;">Verify you have sent tokens!</button>
 </div>
